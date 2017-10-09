@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout    xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ff000000"
+        tools:context="sdktester.client.zixi.com.zixiclientsdktester.MainActivity">
+
+    <sdktester.client.zixi.com.zixiclientsdktester.AspectRatioFrameLayout
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/viewer_stream_out_aspect_ratio">
+        <SurfaceView
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/viewer_stream_out"/>
+    </sdktester.client.zixi.com.zixiclientsdktester.AspectRatioFrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:alpha="0.7"
+        android:id="@+id/viewer_ui_holder">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="135dp"/>
+        <LinearLayout
+            android:layout_gravity="top"
+            android:gravity="top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_gravity="top"
+                android:layout_width="wrap_content"
+                android:textColor="@color/caption_text_color"
+                android:layout_height="wrap_content"
+                android:id="@+id/viewer_url_prefix"
+                android:text="URL: "/>
+            <AutoCompleteTextView
+                android:layout_width="0dp"
+                android:textColor="@color/caption_text_color"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/viewer_url"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/viewer_connect"
+                android:backgroundTint="@color/button_tint"
+                android:onClick="onButtonClicked"
+                android:text="Connect"/>
+
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/viewer_latency_selector_holder">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/caption_text_color"
+                android:text="Latency :"/>
+            <Spinner
+                android:textColor="@color/caption_text_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/viewer_latency_selector"/>
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <include layout="@layout/zixi_bitrates_adapter_layout"
+                android:id="@+id/bitrates_holder"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <TextView
+                android:layout_gravity="bottom|right"
+                android:gravity="bottom|right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ff0000"
+                android:id="@+id/viewer_zixi_version"/>
+        </FrameLayout>
+    </LinearLayout>
+</FrameLayout>

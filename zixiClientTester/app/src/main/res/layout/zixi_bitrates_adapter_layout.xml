@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+    <TextView
+        android:focusableInTouchMode="false"
+        android:focusable="false"
+        android:enabled="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/zixi_bitrates_mode_text"
+        android:text="Auto"
+        android:shadowColor="#ffffff"
+        android:shadowDx="1.5"
+        android:shadowDy="1.3"
+        android:shadowRadius="1.6"
+        android:textColor="#ff00ff00"/>
+    <TextView
+        android:focusableInTouchMode="false"
+        android:focusable="false"
+        android:enabled="false"
+        android:shadowColor="#000000"
+        android:shadowDx="1.5"
+        android:shadowDy="1.3"
+        android:shadowRadius="1.6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/zixi_bitrates_not_recovered"
+        android:text="Auto"
+        android:textColor="#ffff0000"/>
+
+    <ListView
+        android:enabled="false"
+        android:focusable="false"
+
+        android:focusableInTouchMode="false"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/zixi_bitrate_bitrates_list"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/zixi_bitrate_go_up"
+        android:text="/\\"
+        android:backgroundTint="@color/button_tint"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/zixi_bitrate_go_down"
+        android:backgroundTint="@color/button_tint"
+        android:text="\\/"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/zixi_bitrate_go_auto"
+        android:backgroundTint="@color/button_tint"
+        android:text="Auto"
+        />
+
+
+</LinearLayout>
