@@ -189,7 +189,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onVideoFormatChanged(String name, int h, int w) {
+        public void onVideoFormatChanged(String mime, int height, int width) {
+
+        }
+
+        @Override
+        public void onAudioFormatChanged(String mime, int channelCount, int sampleRate) {
 
         }
     };
