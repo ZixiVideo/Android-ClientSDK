@@ -26,6 +26,7 @@
         android:alpha="0.7"
         android:id="@+id/viewer_ui_holder">
         <FrameLayout
+            android:id="@+id/viewer_ui_holder_blank_top_frame"
             android:layout_width="match_parent"
             android:layout_height="135dp"/>
         <LinearLayout

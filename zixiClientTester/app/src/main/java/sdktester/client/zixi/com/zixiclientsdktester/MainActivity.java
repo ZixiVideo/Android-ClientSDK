@@ -2,6 +2,7 @@ package sdktester.client.zixi.com.zixiclientsdktester;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PersistableBundle;
@@ -20,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -97,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
     private Button                      mBitrateAutoMode;
     private Spinner mLatencySelector;
     private TextView                    mVersionText;
+    private FrameLayout                 mUiTopBlankFrame;
     private int                         mPresentedBitrates;
     private boolean                     mBitrateOnAutoMode;
     private int                         mSelectedBitrateId;
@@ -309,6 +312,7 @@ public class MainActivity extends AppCompatActivity {
         mBitratesList = (ListView)findViewById(R.id.zixi_bitrate_bitrates_list);
         mLatencySelectorHolder = (LinearLayout)findViewById(R.id.viewer_latency_selector_holder);
         mLatencySelector = (Spinner)findViewById(R.id.viewer_latency_selector);
+        mUiTopBlankFrame = (FrameLayout)findViewById(R.id.viewer_ui_holder_blank_top_frame);
         mLatencySelector.setAdapter( new ArrayAdapter<String>(this, R.layout.latency_item, LATENCIES_STR));
         mLatencySelector.setSelection(4);
         mVersionText =(TextView)findViewById(R.id.viewer_zixi_version);
@@ -519,7 +523,7 @@ public class MainActivity extends AppCompatActivity {
                 mConnectButton.setEnabled(true);
                 mLatencySelectorHolder.setVisibility(View.INVISIBLE);
                 mConnectButton.setText("Disconnect");
-                maybeUpdateBitrate(-1,null,-1);
+                // maybeUpdateBitrate(-1,null,-1);
                 break;
             case STATE_RESUMED:
                 mLatencySelectorHolder.setVisibility(View.INVISIBLE);
@@ -530,8 +534,8 @@ public class MainActivity extends AppCompatActivity {
                 if (C.SDK_INT >=17) {
                     mStreamOutput.requestLayout();
                 }
-                mBitratesHolder.setVisibility(View.INVISIBLE);
-                maybeUpdateBitrate(-1,null,-1);
+                mBitratesHolder.setVisibility(View.VISIBLE);
+
                 mStreamOutput.requestLayout();
                 mUiHolder.setVisibility(View.INVISIBLE);
                 mConnectButton.setText("Disconnect");
@@ -539,6 +543,7 @@ public class MainActivity extends AppCompatActivity {
                 mConnectButton.setEnabled(true);
                 break;
             case STATE_DISCONNECTING:
+                mBitratesHolder.setVisibility(View.INVISIBLE);
                 mLatencySelectorHolder.setVisibility(View.INVISIBLE);
                 mLastUserInput = -1;
                 mUiHolder.setVisibility(View.VISIBLE);
@@ -661,5 +666,16 @@ public class MainActivity extends AppCompatActivity {
         if (C.SDK_INT > 23){
             terminatePlayer();
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation ==Configuration.ORIENTATION_LANDSCAPE ) {
+            mUiTopBlankFrame.setVisibility(View.GONE);
+        } else {
+            mUiTopBlankFrame.setVisibility(View.VISIBLE);
+        }
+        mUiHolder.requestLayout();
     }
 }
