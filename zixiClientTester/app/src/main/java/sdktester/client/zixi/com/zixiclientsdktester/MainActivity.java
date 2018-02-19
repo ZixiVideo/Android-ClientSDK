@@ -29,8 +29,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.zixi.playersdk.ZixiError;
+import com.zixi.playersdk.ZixiLogEvents;
 import com.zixi.playersdk.ZixiPlayer;
 import com.zixi.playersdk.ZixiPlayerEvents;
+import com.zixi.playersdk.ZixiPlayerSdk;
 import com.zixi.playersdk.core.ZixiClient;
 import com.zixi.playersdk.util.C;
 
@@ -135,6 +137,16 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onSourceDisconnected() {
+
+        }
+
+        @Override
+        public void onReconnecting() {
+
+        }
+
+        @Override
+        public void onReconnected() {
 
         }
 
@@ -410,6 +422,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleConnectPressed() {
+        String decryptionKey = null;
         if (!connected()) {
             mPresentedBitrates = 0;
             String newUrl = mUrlInput.getText().toString();
@@ -428,7 +441,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             initializePlayer();
-            mPlayer.connect("zixi://" + minUrl, LATENCIES_MS[(int)mLatencySelector.getSelectedItemId()]);
+
+            mPlayer.connect("zixi://" + minUrl,"username","", decryptionKey, LATENCIES_MS[(int)mLatencySelector.getSelectedItemId()]);
             handleUiState(STATE_CONNECTING);
         } else {
             handleUiState(STATE_DISCONNECTING);
@@ -439,7 +453,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializePlayer() {
         if (mPlayer == null) {
-            mPlayer = new ZixiPlayer(mPlayerEvents, new Handler());
+
+            mPlayer = ZixiPlayerSdk.newPlayer(mPlayerEvents, new Handler());
+            mPlayer.setLogCallback(new ZixiLogEvents() {
+                @Override
+                public void logMessage(int level, String who, String what) {
+                    Log.println(level,who,what);
+                }
+            });
             mPlayer.setSurface(mStreamOutput.getHolder());
         }
     }
@@ -455,9 +476,13 @@ public class MainActivity extends AppCompatActivity {
     private void maybeUpdateBitrate(int bitrate, int [] bitrates, int count){
         if (bitrate == -1 || bitrates == null || count == -1) {
             if (mPlayer != null && mPlayer.connected()) {
-                bitrates = new int[MAX_ADAPTIVE_STREAMS_COUNT];
-                bitrate = mPlayer.getActiveStreamBitrate(bitrates);
-                count = mPlayer.getAviliableBitratesCount();
+                bitrate = mPlayer.currentBitrate();
+                bitrates = mPlayer.availableBitrates();
+                if (bitrates != null) {
+                    count = bitrates.length;
+                } else {
+                    count = 0;
+                }
             }
         }
 
@@ -601,7 +626,7 @@ public class MainActivity extends AppCompatActivity {
         mBitrateAutoMode.setEnabled( false);
         mBitrateOnAutoMode = true;
         mBitrateModeIndicator.setText("Auto");
-        mPlayer.setActiveBitrate(-1);
+        mPlayer.setCurrentBitrate(ZixiPlayer.INVALID_BITRATE);
     }
 
     private void handleBitrateUp(){
@@ -612,7 +637,7 @@ public class MainActivity extends AppCompatActivity {
                 mBitrateAutoMode.setEnabled(true);
             }
             mSelectedBitrateId--;
-            mPlayer.setActiveBitrate(mSelectedBitrateId);
+            mPlayer.setCurrentBitrate(mSelectedBitrateId);
         }
 
     }
@@ -625,7 +650,7 @@ public class MainActivity extends AppCompatActivity {
                 mBitrateAutoMode.setEnabled(true);
             }
             mSelectedBitrateId++;
-            mPlayer.setActiveBitrate(mSelectedBitrateId);
+            mPlayer.setCurrentBitrate(mSelectedBitrateId);
         }
     }
 
