@@ -462,6 +462,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
             mPlayer.setSurface(mStreamOutput.getHolder());
+
+
+            // New api - for setting display mode
+            //[Default] mPlayer.setDisplayMode(ZixiPlayer.DISPLAY_MODE_FIT);
+            //          mPlayer.setDisplayMode(ZixiPlayer.DISPLAY_MODE_CROP);
+
         }
     }
 
