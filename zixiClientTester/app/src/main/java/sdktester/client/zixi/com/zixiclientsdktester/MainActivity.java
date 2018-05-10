@@ -455,10 +455,12 @@ public class MainActivity extends AppCompatActivity {
         if (mPlayer == null) {
 
             mPlayer = ZixiPlayerSdk.newPlayer(mPlayerEvents, new Handler());
+            mPlayer.setAutoReconnect(true);
             mPlayer.setLogCallback(new ZixiLogEvents() {
                 @Override
                 public void logMessage(int level, String who, String what) {
-                    Log.println(level,who,what);
+                    if (level > Log.DEBUG)
+                        Log.println(level,who,what);
                 }
             });
             mPlayer.setSurface(mStreamOutput.getHolder());
