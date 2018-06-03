@@ -290,6 +290,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
         mBitrateOnAutoMode = true;
         C.hideSystemUi(getWindow().getDecorView());
         mConnectButton = (Button)findViewById(R.id.viewer_connect);
@@ -459,7 +460,7 @@ public class MainActivity extends AppCompatActivity {
             mPlayer.setLogCallback(new ZixiLogEvents() {
                 @Override
                 public void logMessage(int level, String who, String what) {
-                    if (level > Log.DEBUG)
+                    if (level > Log.WARN)
                         Log.println(level,who,what);
                 }
             });
