@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
+import android.os.Message;
 import android.os.PersistableBundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -32,6 +34,7 @@ import com.zixi.playersdk.ZixiError;
 import com.zixi.playersdk.ZixiLogEvents;
 import com.zixi.playersdk.ZixiPlayer;
 import com.zixi.playersdk.ZixiPlayerEvents;
+import com.zixi.playersdk.ZixiPlayerImpl;
 import com.zixi.playersdk.ZixiPlayerSdk;
 import com.zixi.playersdk.core.ZixiClient;
 import com.zixi.playersdk.util.C;
@@ -64,6 +67,34 @@ public class MainActivity extends AppCompatActivity {
     // #include <zixi_definitions.h>...
     private static final int MAX_ADAPTIVE_STREAMS_COUNT = 16;
 
+    private class StatsTickHandler extends Handler {
+        public  StatsTickHandler(Looper l) {
+            super(l);
+        }
+
+        public void tick() {
+            sendEmptyMessageDelayed(0,166);
+        }
+
+        public void stop() {
+            removeMessages(0);
+        }
+        @Override
+        public void handleMessage(Message msg) {
+            MainActivity.this.handleTick();
+        }
+    }
+
+    private void handleTick() {
+        long l = mPlayer.getCurrentPTS90Khz();
+        if (l != ZixiPlayerImpl.INVALID_PTS) {
+            mPtsDisplay.setText(String.format("Current Pts %d", l));
+        } else {
+            mPtsDisplay.setText("Invalid Pts");
+        }
+
+        mStatsTicker.tick();
+    }
 
     private final static String stateToStr(int state) {
         switch (state) {
@@ -93,13 +124,14 @@ public class MainActivity extends AppCompatActivity {
     private TextView                    mBitrateIndicator;
     private LinearLayout                mBitratesHolder;
     private ZixiBitrateAdapter          mBitratesAdapter;
-    private ListView mBitratesList;
+    private ListView                    mBitratesList;
     private TextView                    mBitrateModeIndicator;
+    private TextView                    mPtsDisplay;
     private LinearLayout                mLatencySelectorHolder;
     private Button                      mBitrateUpButton;
     private Button                      mBitrateDownButton;
     private Button                      mBitrateAutoMode;
-    private Spinner mLatencySelector;
+    private Spinner                     mLatencySelector;
     private TextView                    mVersionText;
     private FrameLayout                 mUiTopBlankFrame;
     private int                         mPresentedBitrates;
@@ -108,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean                     mDropUrlSelection;
     private boolean                     mActivityResumed;
 
-
+    private StatsTickHandler            mStatsTicker;
     private int                         mPlayerState;
     private long                        mLastUserInput = -1;
 
@@ -171,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
                     handleUiState(STATE_RESUMED);
                 }
             });
+
         }
 
         @Override
@@ -326,6 +359,7 @@ public class MainActivity extends AppCompatActivity {
         mLatencySelectorHolder = (LinearLayout)findViewById(R.id.viewer_latency_selector_holder);
         mLatencySelector = (Spinner)findViewById(R.id.viewer_latency_selector);
         mUiTopBlankFrame = (FrameLayout)findViewById(R.id.viewer_ui_holder_blank_top_frame);
+        mPtsDisplay = (TextView)findViewById(R.id.viewer_ui_stats_text);
         mLatencySelector.setAdapter( new ArrayAdapter<String>(this, R.layout.latency_item, LATENCIES_STR));
         mLatencySelector.setSelection(4);
         mVersionText =(TextView)findViewById(R.id.viewer_zixi_version);
@@ -565,6 +599,8 @@ public class MainActivity extends AppCompatActivity {
                     mStreamOutput.setVisibility(View.VISIBLE);
 
                 }
+
+                mPtsDisplay.setVisibility(View.VISIBLE);
                 if (C.SDK_INT >=17) {
                     mStreamOutput.requestLayout();
                 }
@@ -575,8 +611,18 @@ public class MainActivity extends AppCompatActivity {
                 mConnectButton.setText("Disconnect");
                 mConnectButton.setVisibility(View.VISIBLE);
                 mConnectButton.setEnabled(true);
+                if (mStatsTicker != null) {
+                    mStatsTicker.stop();
+                }
+                mStatsTicker = new StatsTickHandler(getMainLooper());
+                mStatsTicker.tick();
                 break;
             case STATE_DISCONNECTING:
+                if (mStatsTicker != null) {
+                    mStatsTicker.stop();
+                    mStatsTicker = null;
+                }
+                mPtsDisplay.setVisibility(View.GONE);
                 mBitratesHolder.setVisibility(View.INVISIBLE);
                 mLatencySelectorHolder.setVisibility(View.INVISIBLE);
                 mLastUserInput = -1;

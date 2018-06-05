@@ -29,13 +29,19 @@
             android:id="@+id/viewer_ui_holder_blank_top_frame"
             android:layout_width="match_parent"
             android:layout_height="135dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/viewer_ui_stats_text"
+            android:textColor="@color/caption_text_color"
+            android:visibility="gone"/>
         <LinearLayout
             android:layout_gravity="top"
             android:gravity="top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
             <TextView
                 android:layout_gravity="top"
                 android:layout_width="wrap_content"
