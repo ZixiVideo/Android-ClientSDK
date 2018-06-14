@@ -36,6 +36,7 @@ import com.zixi.playersdk.ZixiPlayer;
 import com.zixi.playersdk.ZixiPlayerEvents;
 import com.zixi.playersdk.ZixiPlayerImpl;
 import com.zixi.playersdk.ZixiPlayerSdk;
+import com.zixi.playersdk.ZixiPlayerSessionStatistics;
 import com.zixi.playersdk.core.ZixiClient;
 import com.zixi.playersdk.util.C;
 
@@ -86,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleTick() {
+        ZixiPlayerSessionStatistics stats =  mPlayer.getSessionInfo();
+        
         long l = mPlayer.getCurrentPTS90Khz();
         if (l != ZixiPlayerImpl.INVALID_PTS) {
             mPtsDisplay.setText(String.format("Current Pts %d", l));
