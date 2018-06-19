@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleTick() {
         ZixiPlayerSessionStatistics stats =  mPlayer.getSessionInfo();
-        
+
         long l = mPlayer.getCurrentPTS90Khz();
         if (l != ZixiPlayerImpl.INVALID_PTS) {
             mPtsDisplay.setText(String.format("Current Pts %d", l));

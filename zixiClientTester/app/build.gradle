@@ -7,8 +7,8 @@ android {
         applicationId "sdktester.client.zixi.com.zixiclientsdktester"
         minSdkVersion 18
         targetSdkVersion 25
-        versionCode 15
-        versionName "1.11.0.29904"
+        versionCode 16
+        versionName "1.11.0.29953"
     }
     buildTypes {
         release {
