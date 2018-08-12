@@ -87,16 +87,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleTick() {
-        ZixiPlayerSessionStatistics stats =  mPlayer.getSessionInfo();
+        if (mPlayer != null) {
+            ZixiPlayerSessionStatistics stats = mPlayer.getSessionInfo();
 
-        long l = mPlayer.getCurrentPTS90Khz();
-        if (l != ZixiPlayerImpl.INVALID_PTS) {
-            mPtsDisplay.setText(String.format("Current Pts %d", l));
-        } else {
-            mPtsDisplay.setText("Invalid Pts");
+            long l = mPlayer.getCurrentPTS90Khz();
+            if (l != ZixiPlayerImpl.INVALID_PTS) {
+                mPtsDisplay.setText(String.format("Current Pts %d", l));
+            } else {
+                mPtsDisplay.setText("Invalid Pts");
+            }
+
+            mStatsTicker.tick();
         }
-
-        mStatsTicker.tick();
     }
 
     private final static String stateToStr(int state) {
