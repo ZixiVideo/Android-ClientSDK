@@ -487,11 +487,14 @@ public class MainActivity extends AppCompatActivity {
         } else {
             handleUiState(STATE_DISCONNECTING);
             mPlayer.disconnect();
+            mPlayer.release();
+            mPlayer = null;
         }
 
     }
 
     private void initializePlayer() {
+        Log.e(TAG, "initializePlayer >>");
         if (mPlayer == null) {
 
             mPlayer = ZixiPlayerSdk.newPlayer(mPlayerEvents, new Handler());
@@ -511,14 +514,17 @@ public class MainActivity extends AppCompatActivity {
             //          mPlayer.setDisplayMode(ZixiPlayer.DISPLAY_MODE_CROP);
 
         }
+        Log.e(TAG, "initializePlayer <<");
     }
 
     private void terminatePlayer() {
+        Log.e(TAG, "terminatePlayer >>");
         if (mPlayer != null) {
             mPlayer.disconnect();
             mPlayer.release();
             mPlayer = null;
         }
+        Log.e(TAG, "terminatePlayer <<");
     }
 
     private void maybeUpdateBitrate(int bitrate, int [] bitrates, int count){
