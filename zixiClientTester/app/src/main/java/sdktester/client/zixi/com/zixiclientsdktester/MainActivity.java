@@ -34,7 +34,7 @@ import com.zixi.playersdk.ZixiError;
 import com.zixi.playersdk.ZixiLogEvents;
 import com.zixi.playersdk.ZixiPlayer;
 import com.zixi.playersdk.ZixiPlayerEvents;
-import com.zixi.playersdk.ZixiPlayerImpl;
+import com.zixi.playersdk.ZixiPlayerImplV2;
 import com.zixi.playersdk.ZixiPlayerSdk;
 import com.zixi.playersdk.ZixiPlayerSessionStatistics;
 import com.zixi.playersdk.core.ZixiClient;
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             ZixiPlayerSessionStatistics stats = mPlayer.getSessionInfo();
 
             long l = mPlayer.getCurrentPTS90Khz();
-            if (l != ZixiPlayerImpl.INVALID_PTS) {
+            if (l != ZixiPlayerImplV2.INVALID_PTS) {
                 mPtsDisplay.setText(String.format("Current Pts %d", l));
             } else {
                 mPtsDisplay.setText("Invalid Pts");
