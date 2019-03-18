@@ -250,6 +250,23 @@ public class MainActivity extends AppCompatActivity {
         public void onAudioFormatChanged(String mime, int channelCount, int sampleRate) {
 
         }
+
+        @Override
+        public void onVideoDecoderFailedToStart(final int width, final int height, final String codec) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Snackbar.make(getWindow().getDecorView(), "Failed to initialize video decoder [" + width + "x"+ height + "] " + codec, Snackbar.LENGTH_LONG).show();
+                    // disconnect
+                    handleConnectPressed();
+                }
+            });
+        }
+
+        @Override
+        public void onAudioDecoderFailedToStart(int channelConfig, int sampleRate, String codec) {
+
+        }
     };
 
     private void handleStreamBitrateChanged(int bitrate, int [] bitrates, int bitrates_count) {
